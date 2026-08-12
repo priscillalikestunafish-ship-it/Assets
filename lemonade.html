@@ -1,0 +1,1369 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lemonade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    <style>
+        [data-theme="purple"] {
+            --bg1: #2a0033;
+            --bg2: #0a0a0a;
+            --card1: #1a0020;
+            --card2: #0d0d0d;
+            --border: rgba(150, 40, 200, 0.6);
+            --border-soft: rgba(150, 40, 200, 0.25);
+            --accent: #c44dff;
+            --accent-dim: #a06ad0;
+            --hover: #3a0860;
+            --inset: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="midnight"] {
+            --bg1: #0b1026;
+            --bg2: #000008;
+            --card1: #0d1226;
+            --card2: #05070f;
+            --border: rgba(80, 140, 255, 0.6);
+            --border-soft: rgba(80, 140, 255, 0.25);
+            --accent: #4d9fff;
+            --accent-dim: #7fb3ff;
+            --hover: #12294d;
+            --inset: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="neon"] {
+            --bg1: #032013;
+            --bg2: #000803;
+            --card1: #04291a;
+            --card2: #021007;
+            --border: rgba(0, 255, 136, 0.6);
+            --border-soft: rgba(0, 255, 136, 0.25);
+            --accent: #00ff88;
+            --accent-dim: #66ffb2;
+            --hover: #0a3d28;
+            --inset: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="ocean"] {
+            --bg1: #062a38;
+            --bg2: #021014;
+            --card1: #0a3242;
+            --card2: #04151d;
+            --border: rgba(0, 200, 255, 0.6);
+            --border-soft: rgba(0, 200, 255, 0.25);
+            --accent: #00d0ff;
+            --accent-dim: #7fe0ff;
+            --hover: #0a3d50;
+            --inset: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="crimson"] {
+            --bg1: #38060a;
+            --bg2: #120203;
+            --card1: #3a0a0e;
+            --card2: #150305;
+            --border: rgba(255, 70, 90, 0.6);
+            --border-soft: rgba(255, 70, 90, 0.25);
+            --accent: #ff5260;
+            --accent-dim: #ff8a94;
+            --hover: #4d0f14;
+            --inset: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="ghost"] {
+            --bg1: #f2f2f5;
+            --bg2: #ffffff;
+            --card1: #ffffff;
+            --card2: #ececf0;
+            --border: rgba(20, 20, 30, 0.35);
+            --border-soft: rgba(20, 20, 30, 0.15);
+            --accent: #2b2b35;
+            --accent-dim: #6a6a78;
+            --hover: #e2e2e8;
+            --inset: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Lilita One', 'Segoe UI', Arial, sans-serif;
+            background: #160021;
+            color: var(--accent);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        input,
+        textarea {
+            user-select: text;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--card2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* ---------- SIDEBAR ---------- */
+        .side {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 96px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 8px;
+            background: var(--card1);
+            border-right: 3px solid var(--border);
+        }
+
+        .side-logo {
+            display: none;
+        }
+
+        .nav-btn {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 4px;
+            background: none;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            color: var(--accent-dim);
+            cursor: pointer;
+            font-size: 11px;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--accent-dim);
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--hover);
+            color: var(--accent);
+            transform: translateX(3px);
+        }
+
+        .nav-btn:hover svg {
+            fill: var(--accent);
+        }
+
+        .nav-btn.active {
+            background: var(--hover);
+            border-color: var(--border);
+            color: var(--accent);
+        }
+
+        .nav-btn.active svg {
+            fill: var(--accent);
+        }
+
+        /* ---------- PAGES ---------- */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        #home.active {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 40px 110px 130px;
+        }
+
+        #games.active,
+        #settings.active {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 50px 44px 110px 130px;
+            overflow-y: auto;
+            background: #160021;
+            animation: pageIn 0.22s ease;
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            margin: 0 0 20px;
+            font-size: 34px;
+            letter-spacing: 5px;
+            color: var(--accent);
+        }
+
+        /* ---------- HOME ---------- */
+        .brand {
+            font-size: 56px;
+            font-weight: bold;
+            color: var(--accent-dim);
+            letter-spacing: 8px;
+            margin-bottom: 6px;
+        }
+
+        .clock-time {
+            font-size: 74px;
+            color: var(--accent);
+            letter-spacing: 4px;
+            font-weight: bold;
+        }
+
+        .clock-day {
+            font-size: 22px;
+            color: var(--accent-dim);
+            letter-spacing: 5px;
+            margin-top: 10px;
+        }
+
+        .clock-date {
+            font-size: 17px;
+            color: var(--accent-dim);
+            letter-spacing: 3px;
+            margin-top: 6px;
+            opacity: 0.85;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            width: 100%;
+            max-width: 720px;
+            margin-top: 40px;
+        }
+
+        .action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 8px;
+            background: var(--card1);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .action:hover {
+            background: var(--hover);
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        .action .act-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action .act-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--accent);
+        }
+
+        .action .act-cover {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+        }
+
+        /* ---------- GAMES ---------- */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+            max-width: 1100px;
+        }
+
+        .game {
+            display: block;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--card1);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .game img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+
+        /* ---------- SETTINGS ---------- */
+        .settings-wrap {
+            max-width: 560px;
+        }
+
+        .setting {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 13px 0;
+            border-bottom: 2px solid var(--border-soft);
+            font-size: 16px;
+            letter-spacing: 1px;
+            color: var(--accent);
+        }
+
+        .setting:last-child {
+            border-bottom: none;
+        }
+
+        .setting input[type="text"] {
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            width: 220px;
+            outline: none;
+        }
+
+        .setting input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .setting select {
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .setting select:focus {
+            border-color: var(--accent);
+        }
+
+        .setting .val {
+            font-size: 14px;
+            color: var(--accent-dim);
+            width: 46px;
+            text-align: right;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent);
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* quick actions editor */
+        .qa-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            width: 100%;
+        }
+
+        .qa-grid .qa-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .qa-grid label {
+            font-size: 13px;
+            color: var(--accent-dim);
+            letter-spacing: 1px;
+        }
+
+        .qa-grid select {
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 14px;
+            font-family: inherit;
+            width: 100%;
+            outline: none;
+        }
+
+        .qa-grid .qa-hint {
+            font-size: 12px;
+            color: var(--accent-dim);
+            opacity: 0.85;
+            min-height: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .setting.column {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+        }
+
+        .danger-btn {
+            width: 100%;
+            padding: 11px;
+            font-family: inherit;
+            font-size: 15px;
+            letter-spacing: 2px;
+            color: #ff5260;
+            background: var(--card1);
+            border: 2px solid rgba(255, 82, 96, 0.6);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .danger-btn:hover {
+            background: rgba(255, 82, 96, 0.12);
+        }
+
+        /* ---------- MUSIC DOCK ---------- */
+        .dock {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 14px;
+            height: 72px;
+            width: min(760px, calc(100vw - 24px));
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 0 20px;
+            background: color-mix(in srgb, var(--card1) 82%, transparent);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 3px solid var(--border);
+            border-radius: 22px;
+        }
+
+        .dock-play {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dock-play svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--bg2);
+        }
+
+        .dock-play:hover {
+            filter: brightness(1.15);
+            transform: scale(1.06);
+        }
+
+        .dock-info {
+            flex: 1;
+            min-width: 0;
+            padding: 6px 4px;
+        }
+
+        .track-name {
+            display: block;
+            font-size: 15px;
+            letter-spacing: 2px;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playbar {
+            position: relative;
+            height: 12px;
+            border-radius: 6px;
+            background: var(--card2);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            margin-top: 9px;
+        }
+
+        .playbar-fill {
+            height: 100%;
+            width: 0;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+
+        .times {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--accent-dim);
+            margin-top: 7px;
+            letter-spacing: 1px;
+        }
+
+        .dock-select {
+            flex-shrink: 0;
+            margin-left: 6px;
+        }
+
+        .dock-select select {
+            width: 190px;
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        /* ---------- GAME PICKER ---------- */
+        .pick-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pick-overlay.show {
+            display: flex;
+        }
+
+        .pick-box {
+            background: var(--card1);
+            border: 3px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 560px;
+            width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+            color: var(--accent);
+        }
+
+        .pick-box h3 {
+            margin: 0 0 16px;
+            letter-spacing: 2px;
+        }
+
+        .pick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .pick-game {
+            cursor: pointer;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card1);
+            transition: all 0.2s ease;
+        }
+
+        .pick-game:hover {
+            background: var(--hover);
+            border-color: var(--accent);
+            transform: scale(1.04);
+        }
+
+        .pick-game img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+
+        .pick-box .cancel {
+            margin-top: 16px;
+            padding: 8px 20px;
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 1px;
+        }
+
+        .pick-box .cancel:hover {
+            background: var(--hover);
+        }
+
+        /* ---------- GAME OVERLAY ---------- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            z-index: 100;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .overlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .overlay .close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--card1);
+            color: var(--accent);
+            border: 2px solid var(--border);
+            font-size: 18px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .overlay .close:hover {
+            background: var(--hover);
+        }
+
+        @media (max-width: 700px) {
+            .side {
+                width: 72px;
+            }
+
+            #home.active {
+                padding: 0 20px 100px 90px;
+            }
+
+            #games.active,
+            #settings.active {
+                padding: 40px 20px 100px 90px;
+            }
+
+            .actions {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .dock-select {
+                display: none;
+            }
+
+            .clock-time {
+                font-size: 52px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="purple">
+    <!-- SIDEBAR -->
+    <nav class="side" id="side">
+        <button class="nav-btn active" data-page="home" onclick="showPage('home')"></button>
+        <button class="nav-btn" data-page="games" onclick="showPage('games')"></button>
+        <button class="nav-btn" data-page="settings" onclick="showPage('settings')"></button>
+    </nav>
+
+    <main>
+        <!-- HOME -->
+        <section class="page active" id="home">
+            <div class="brand">LEMONADE</div>
+            <div class="clock-time" id="clockTime">00:00:00</div>
+            <div class="clock-day" id="clockDay">Monday</div>
+            <div class="clock-date" id="clockDate">January 1, 2026</div>
+            <div class="actions" id="quickActions"></div>
+        </section>
+
+        <!-- GAMES -->
+        <section class="page" id="games">
+            <h1 class="page-title">Games</h1>
+            <div class="games-grid" id="gameList"></div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="page" id="settings">
+            <h1 class="page-title">Settings</h1>
+            <div class="settings-wrap">
+                <div class="setting">
+                    <label for="themeSelect">Theme</label>
+                    <select id="themeSelect" onchange="applyTheme(this.value)">
+                        <option value="purple">Purple</option>
+                        <option value="midnight">Midnight</option>
+                        <option value="neon">Neon</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="crimson">Crimson</option>
+                        <option value="ghost">Ghost</option>
+                    </select>
+                </div>
+                <div class="setting">
+                    <label for="cloakSelect">Cloak</label>
+                    <select id="cloakSelect" onchange="applyCloak(this.value)">
+                        <option value="none">None</option>
+                        <option value="custom">Custom URL</option>
+                    </select>
+                </div>
+                <div class="setting" id="customUrlRow" style="display:none">
+                    <label for="customUrlInput">Cloak URL</label>
+                    <input type="text" id="customUrlInput" placeholder="https://youtube.com" onchange="setCustomUrl(this.value)">
+                </div>
+                <div class="setting">
+                    <label for="volSlider">Music volume</label>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <input type="range" id="volSlider" min="0" max="100" value="100" oninput="setVolume(this.value)">
+                        <span class="val" id="volVal">100%</span>
+                    </div>
+                </div>
+                <div class="setting">
+                    <label for="musicToggle">Music on / off</label>
+                    <input type="checkbox" id="musicToggle" checked onchange="setMusicEnabled(this.checked)">
+                </div>
+                <div class="setting column">
+                    <label>Quick actions</label>
+                    <div class="qa-grid" id="qaGrid"></div>
+                </div>
+                <div class="setting column">
+                    <label>Revert to factory settings</label>
+                    <button class="danger-btn" onclick="factoryReset()">Reset all settings</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MUSIC DOCK -->
+    <footer class="dock">
+        <button class="dock-play" id="playBtn" onclick="toggleMusic()" title="Play / Pause">
+            <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="dock-info">
+            <span class="track-name" id="trackName">C418 - dog</span>
+            <div class="playbar" id="playbar" onclick="seek(event)">
+                <div class="playbar-fill" id="playbarFill"></div>
+            </div>
+            <div class="times">
+                <span id="curTime">0:00</span>
+                <span id="durTime">0:00</span>
+            </div>
+        </div>
+        <div class="dock-select">
+            <select id="trackSelect" onchange="changeTrack()"></select>
+        </div>
+    </footer>
+
+    <!-- GAME PICKER -->
+    <div class="pick-overlay" id="pickOverlay" onclick="if(event.target===this)closePick()">
+        <div class="pick-box">
+            <h3>Choose a game</h3>
+            <div class="pick-grid" id="pickGrid"></div>
+            <button class="cancel" onclick="closePick()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- GAME OVERLAY -->
+    <div class="overlay" id="overlay">
+        <iframe id="gameFrame"></iframe>
+        <button class="close" onclick="closeGame()" title="Close">&#10005;</button>
+    </div>
+
+    <audio id="ambient" src="https://quantil.jsdelivr.net/gh/priscillalikestunafish-ship-it/Assets/C418-dog.mp3" loop></audio>
+
+    <script>
+        var CDN = "https://quantil.jsdelivr.net/gh/priscillalikestunafish-ship-it/Assets/";
+        var CB = Date.now();
+        var ambient = document.getElementById('ambient');
+        var playBtn = document.getElementById('playBtn');
+        var wasPlaying = false;
+
+        var tracks = [
+            { name: 'C418 - dog', src: 'C418-dog.mp3' },
+            { name: 'TETORIS', src: 'Tetoris.mp3' }
+        ];
+        var trackSelect = document.getElementById('trackSelect');
+        tracks.forEach(function (t) {
+            var opt = document.createElement('option');
+            opt.value = t.name;
+            opt.textContent = t.name;
+            trackSelect.appendChild(opt);
+        });
+        trackSelect.selectedIndex = 0;
+
+        var settings = {
+            theme: 'purple',
+            cloak: 'none',
+            customUrl: '',
+            volume: 100,
+            musicEnabled: true,
+            quickActions: ['games', 'settings', 'music', 'theme', 'cloak']
+        };
+
+        try {
+            var saved = JSON.parse(localStorage.getItem('lemonadeSettings') || '{}');
+            for (var key in settings) {
+                if (saved[key] !== undefined) settings[key] = saved[key];
+            }
+        } catch (e) {}
+
+        function saveSettings() {
+            try {
+                localStorage.setItem('lemonadeSettings', JSON.stringify(settings));
+            } catch (e) {}
+        }
+
+        function applyTheme(t) {
+            settings.theme = t;
+            document.body.setAttribute('data-theme', t);
+            saveSettings();
+        }
+
+        function cycleTheme() {
+            var order = ['purple', 'midnight', 'neon', 'ocean', 'crimson', 'ghost'];
+            var i = order.indexOf(settings.theme);
+            applyTheme(order[(i + 1) % order.length]);
+            document.getElementById('themeSelect').value = settings.theme;
+        }
+
+        /* ---------- CLOAK ---------- */
+        var cloaks = {
+            none: { title: 'Lemonade', emoji: '&#127819;' }
+        };
+
+        function setFavicon(icon) {
+            var link = document.getElementById('favicon');
+            if (!link) {
+                link = document.createElement('link');
+                link.id = 'favicon';
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            if (icon.indexOf('http') === 0) {
+                link.href = icon;
+            } else {
+                var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><text y=".9em" font-size="28">' + icon + '</text></svg>';
+                link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+            }
+        }
+
+        function domainFromUrl(u) {
+            try {
+                return new URL(u).hostname;
+            } catch (e) {
+                return u.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+            }
+        }
+
+        function setCustomUrl(v) {
+            settings.customUrl = v;
+            saveSettings();
+            if (settings.cloak === 'custom') {
+                applyCloak('custom');
+            }
+        }
+
+        function applyCloak(c) {
+            settings.cloak = c;
+            var row = document.getElementById('customUrlRow');
+            if (row) row.style.display = c === 'custom' ? 'flex' : 'none';
+            if (c === 'custom' && settings.customUrl) {
+                var host = domainFromUrl(settings.customUrl);
+                document.title = host.charAt(0).toUpperCase() + host.slice(1);
+                setFavicon('https://www.google.com/s2/favicons?domain=' + host + '&sz=64');
+            } else {
+                var cloak = cloaks[c] || cloaks.none;
+                document.title = cloak.title;
+                setFavicon(cloak.emoji);
+            }
+            saveSettings();
+        }
+
+        /* ---------- NAV ---------- */
+        function showPage(name) {
+            document.querySelectorAll('.page').forEach(function (p) {
+                p.classList.toggle('active', p.id === name);
+            });
+            document.querySelectorAll('.nav-btn').forEach(function (b) {
+                b.classList.toggle('active', b.dataset.page === name);
+            });
+        }
+
+        var svgHome = '<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>';
+        var svgGames = '<svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>';
+        var svgSettings = '<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>';
+        var svgTheme = '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>';
+        var svgCloak = '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+        var svgMusic = '<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>';
+        var svgPlay = '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>';
+
+        var navDefs = { home: svgHome, games: svgGames, settings: svgSettings };
+        document.querySelectorAll('.nav-btn').forEach(function (b) {
+            var n = b.dataset.page;
+            b.innerHTML = navDefs[n] + '<span>' + n.charAt(0).toUpperCase() + n.slice(1) + '</span>';
+        });
+
+        /* ---------- QUICK ACTIONS ---------- */
+        var quickActions = {
+            home: { label: 'Home', icon: svgHome, run: function () { showPage('home'); } },
+            games: { label: 'Games', icon: svgGames, run: function () { showPage('games'); } },
+            settings: { label: 'Settings', icon: svgSettings, run: function () { showPage('settings'); } },
+            theme: { label: 'Theme', icon: svgTheme, run: function () { cycleTheme(); } },
+            cloak: { label: 'Cloak', icon: svgCloak, run: function () { showPage('settings'); } },
+            music: { label: 'Music', icon: svgMusic, run: function () { toggleMusic(); } }
+        };
+        for (var gi = 1; gi <= 10; gi++) {
+            (function (n) {
+                quickActions['game' + n] = {
+                    label: 'Game ' + n,
+                    icon: svgPlay,
+                    cover: CDN + 'game_' + n + '/cover.png?cb=' + CB,
+                    run: function () { openGame(CDN + 'game_' + n + '/index.html'); }
+                };
+            })(gi);
+        }
+
+        function renderActions() {
+            var container = document.getElementById('quickActions');
+            container.innerHTML = '';
+            settings.quickActions.forEach(function (name) {
+                var act = quickActions[name] || quickActions.home;
+                var tile = document.createElement('button');
+                tile.className = 'action';
+                if (act.cover) {
+                    tile.innerHTML = '<img class="act-cover" src="' + act.cover + '" alt="' + act.label + '"><span>' + act.label + '</span>';
+                } else {
+                    tile.innerHTML = '<span class="act-icon">' + act.icon + '</span><span>' + act.label + '</span>';
+                }
+                tile.onclick = function () { act.run(); };
+                container.appendChild(tile);
+            });
+        }
+
+        /* ---------- QUICK ACTIONS EDITOR ---------- */
+        var pickSlot = -1;
+
+        function buildPickGrid() {
+            var grid = document.getElementById('pickGrid');
+            grid.innerHTML = '';
+            for (var i = 1; i <= 10; i++) {
+                (function (n) {
+                    var d = document.createElement('div');
+                    d.className = 'pick-game';
+                    var img = document.createElement('img');
+                    img.src = CDN + 'game_' + n + '/cover.png?cb=' + CB;
+                    img.alt = 'Game ' + n;
+                    d.appendChild(img);
+                    d.onclick = function () { assignGame(n); };
+                    grid.appendChild(d);
+                })(i);
+            }
+        }
+
+        function openPick(slot) {
+            pickSlot = slot;
+            buildPickGrid();
+            document.getElementById('pickOverlay').classList.add('show');
+        }
+
+        function closePick() {
+            document.getElementById('pickOverlay').classList.remove('show');
+            pickSlot = -1;
+        }
+
+        function assignGame(n) {
+            if (pickSlot < 0) return;
+            settings.quickActions[pickSlot] = 'game' + n;
+            saveSettings();
+            renderActions();
+            var sel = document.getElementById('qaSel' + pickSlot);
+            sel.value = 'gamepick';
+            var hint = document.getElementById('qaHint' + pickSlot);
+            if (hint) hint.textContent = 'Game: ' + quickActions['game' + n].label;
+            closePick();
+        }
+
+        function buildQaSettings() {
+            var grid = document.getElementById('qaGrid');
+            grid.innerHTML = '';
+            for (var i = 0; i < 5; i++) {
+                var cell = document.createElement('div');
+                cell.className = 'qa-cell';
+                var lab = document.createElement('label');
+                lab.textContent = 'Action ' + (i + 1);
+                var sel = document.createElement('select');
+                sel.id = 'qaSel' + i;
+                ['home', 'games', 'settings', 'theme', 'cloak', 'music'].forEach(function (key) {
+                    var opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = quickActions[key].label;
+                    sel.appendChild(opt);
+                });
+                var pickOpt = document.createElement('option');
+                pickOpt.value = 'gamepick';
+                pickOpt.textContent = 'Open game...';
+                sel.appendChild(pickOpt);
+
+                var hint = document.createElement('div');
+                hint.className = 'qa-hint';
+                hint.id = 'qaHint' + i;
+
+                var stored = settings.quickActions[i] || 'home';
+                if (stored.indexOf('game') === 0 && quickActions[stored]) {
+                    sel.value = 'gamepick';
+                    hint.textContent = 'Game: ' + quickActions[stored].label;
+                } else {
+                    sel.value = stored;
+                }
+                sel.onchange = (function (idx) {
+                    return function () {
+                        var h = document.getElementById('qaHint' + idx);
+                        if (this.value === 'gamepick') {
+                            openPick(idx);
+                        } else {
+                            settings.quickActions[idx] = this.value;
+                            h.textContent = '';
+                            saveSettings();
+                            renderActions();
+                        }
+                    };
+                })(i);
+                cell.appendChild(lab);
+                cell.appendChild(sel);
+                cell.appendChild(hint);
+                grid.appendChild(cell);
+            }
+            buildPickGrid();
+        }
+
+        /* ---------- MUSIC ---------- */
+        function setPlayIcon(playing) {
+            document.getElementById('playIcon').style.display = playing ? 'none' : 'block';
+            document.getElementById('pauseIcon').style.display = playing ? 'block' : 'none';
+        }
+
+        function setVolume(v) {
+            settings.volume = v;
+            ambient.volume = v / 100;
+            document.getElementById('volVal').textContent = v + '%';
+            saveSettings();
+        }
+
+        function setMusicEnabled(on) {
+            settings.musicEnabled = on;
+            saveSettings();
+            if (!on) {
+                ambient.pause();
+            } else if (ambient.paused && wasPlaying) {
+                ambient.play().catch(function () {});
+            }
+        }
+
+        function factoryReset() {
+            if (!confirm('Revert to factory settings? This will undo all of your changes.')) return;
+            localStorage.removeItem('lemonadeSettings');
+            settings = {
+                theme: 'purple',
+                cloak: 'none',
+                customUrl: '',
+                volume: 100,
+                musicEnabled: true,
+                quickActions: ['games', 'settings', 'music', 'theme', 'cloak']
+            };
+            document.getElementById('themeSelect').value = settings.theme;
+            document.getElementById('cloakSelect').value = settings.cloak;
+            document.getElementById('customUrlInput').value = settings.customUrl;
+            document.getElementById('volSlider').value = settings.volume;
+            document.getElementById('volVal').textContent = settings.volume + '%';
+            document.getElementById('musicToggle').checked = settings.musicEnabled;
+            ambient.volume = settings.volume / 100;
+            if (!settings.musicEnabled) {
+                ambient.pause();
+            }
+            applyTheme(settings.theme);
+            applyCloak(settings.cloak);
+            renderActions();
+            buildQaSettings();
+        }
+
+        function changeTrack() {
+            var t = tracks[trackSelect.selectedIndex];
+            document.getElementById('trackName').textContent = t.name;
+            ambient.src = CDN + t.src;
+            ambient.load();
+            ambient.play().then(function () {
+                setPlayIcon(true);
+            }).catch(function () {});
+        }
+
+        function toggleMusic() {
+            if (ambient.paused) {
+                settings.musicEnabled = true;
+                document.getElementById('musicToggle').checked = true;
+                saveSettings();
+                ambient.play().then(function () {
+                    setPlayIcon(true);
+                }).catch(function () {});
+            } else {
+                ambient.pause();
+            }
+        }
+
+        function formatTime(sec) {
+            if (isNaN(sec)) return '0:00';
+            var m = Math.floor(sec / 60);
+            var s = Math.floor(sec % 60);
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        function seek(e) {
+            var bar = document.getElementById('playbar');
+            var rect = bar.getBoundingClientRect();
+            var ratio = (e.clientX - rect.left) / rect.width;
+            ambient.currentTime = ratio * ambient.duration;
+        }
+
+        /* ---------- GAMES ---------- */
+        function prepareGameHtml(url, html) {
+            if (html.toLowerCase().indexOf('<base') === -1) {
+                var base = url.substring(0, url.lastIndexOf('/') + 1);
+                html = html.replace(/<head([^>]*)>/i, '<head$1><base href="' + base + '">');
+            }
+            var scripts = [];
+            html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, function (m, code) {
+                scripts.push({ raw: m, norm: code.replace(/\s+/g, ''), keep: code.replace(/\s+/g, '') !== '' });
+                return m;
+            });
+            for (var i = 0; i < scripts.length; i++) {
+                if (!scripts[i].keep) continue;
+                for (var j = i + 1; j < scripts.length; j++) {
+                    if (scripts[j].keep && scripts[j].norm.indexOf(scripts[i].norm) !== -1) {
+                        scripts[i].keep = false;
+                        break;
+                    }
+                }
+            }
+            var idx = 0;
+            html = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, function () {
+                return scripts[idx++].keep ? scripts[idx - 1].raw : '';
+            });
+            var errScript = '<script>window.onerror=function(m,s,l,c,e){try{document.body.insertAdjacentHTML("beforeend","<div style=\'position:fixed;top:10px;left:10px;background:#300;color:#ff0;z-index:999999;padding:10px;font:12px monospace;max-width:80vw\'>ERROR: "+m+" @ "+(s||"")+":"+(l||"")+"</div>")}catch(x){}};window.addEventListener("unhandledrejection",function(e){try{if(e&&e.reason&&e.reason.name==="NotAllowedError"){return}document.body.insertAdjacentHTML("beforeend","<div style=\'position:fixed;top:10px;left:10px;background:#003;color:#ff0;z-index:999999;padding:10px;font:12px monospace;max-width:80vw\'>PROMISE ERROR: "+e.reason+"</div>")}catch(x){}});window.addEventListener("pointerdown",function(){document.querySelectorAll("audio,video").forEach(function(m){if(m.paused){try{m.play().catch(function(){})}catch(x){}}})},{once:true});<\/script>';
+            return html.replace(/<head([^>]*)>/i, '<head$1>' + errScript);
+        }
+
+        function openGame(url) {
+            wasPlaying = !ambient.paused;
+            ambient.pause();
+            var fetchUrl = url + '?v=' + Date.now();
+            var win = window.open('', '_blank');
+            if (!win) {
+                var overlay = document.getElementById('overlay');
+                overlay.classList.add('show');
+                document.getElementById('gameFrame').srcdoc =
+                    '<!DOCTYPE html><html><body style="background:#0a0a0a;color:#c44dff;font-family:sans-serif;text-align:center;padding-top:40vh">LOADING...</body></html>';
+                fetch(fetchUrl)
+                    .then(function (r) {
+                        if (!r.ok) throw new Error('Failed to load game (' + r.status + ')');
+                        return r.text();
+                    })
+                    .then(function (html) {
+                        document.getElementById('gameFrame').srcdoc = prepareGameHtml(url, html);
+                    })
+                    .catch(function (err) {
+                        alert('Game failed to load: ' + err.message);
+                        if (wasPlaying) {
+                            ambient.play().catch(function () {});
+                        }
+                    });
+                return;
+            }
+            win.document.write(
+                '<!DOCTYPE html><html><body style="background:#0a0a0a;color:#c44dff;font-family:sans-serif;text-align:center;padding-top:40vh">LOADING...</body></html>'
+            );
+            fetch(fetchUrl)
+                .then(function (r) {
+                    if (!r.ok) throw new Error('Failed to load game (' + r.status + ')');
+                    return r.text();
+                })
+                .then(function (html) {
+                    win.document.open();
+                    win.document.write(prepareGameHtml(url, html));
+                    win.document.close();
+                    win.focus();
+                })
+                .catch(function (err) {
+                    win.document.write(
+                        '<!DOCTYPE html><html><body style="background:#0a0a0a;color:#fff;font-family:sans-serif;text-align:center;padding-top:40vh">Failed to load: ' +
+                        err.message + '</body></html>'
+                    );
+                    if (wasPlaying) {
+                        ambient.play().catch(function () {});
+                    }
+                });
+        }
+
+        function closeGame() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('gameFrame').srcdoc = '';
+            if (wasPlaying) {
+                ambient.play().catch(function () {});
+            }
+        }
+
+        /* ---------- GAMES GRID ---------- */
+        var list = document.getElementById('gameList');
+        for (var i = 1; i <= 10; i++) {
+            (function (n) {
+                var a = document.createElement('a');
+                a.className = 'game';
+                a.href = '#';
+                a.onclick = function (e) {
+                    e.preventDefault();
+                    openGame(CDN + 'game_' + n + '/index.html');
+                };
+                var img = document.createElement('img');
+                img.src = CDN + 'game_' + n + '/cover.png?cb=' + CB;
+                img.alt = 'Game ' + n;
+                a.appendChild(img);
+                list.appendChild(a);
+            })(i);
+        }
+
+        /* ---------- CLOCK ---------- */
+        function updateClock() {
+            var d = new Date();
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+            document.getElementById('clockTime').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+            document.getElementById('clockDay').textContent = days[d.getDay()];
+            document.getElementById('clockDate').textContent = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        /* ---------- INIT ---------- */
+        document.getElementById('themeSelect').value = settings.theme;
+        document.getElementById('cloakSelect').value = settings.cloak;
+        document.getElementById('customUrlInput').value = settings.customUrl;
+        document.getElementById('volSlider').value = settings.volume;
+        document.getElementById('volVal').textContent = settings.volume + '%';
+        document.getElementById('musicToggle').checked = settings.musicEnabled;
+        ambient.volume = settings.volume / 100;
+        applyTheme(settings.theme);
+        applyCloak(settings.cloak);
+        renderActions();
+        buildQaSettings();
+
+        document.getElementById('ambient').addEventListener('play', function () {
+            setPlayIcon(true);
+        });
+        document.getElementById('ambient').addEventListener('pause', function () {
+            setPlayIcon(false);
+        });
+        document.getElementById('ambient').addEventListener('loadedmetadata', function () {
+            document.getElementById('durTime').textContent = formatTime(ambient.duration);
+        });
+        document.getElementById('ambient').addEventListener('timeupdate', function () {
+            document.getElementById('curTime').textContent = formatTime(ambient.currentTime);
+            document.getElementById('playbarFill').style.width =
+                (ambient.duration ? (ambient.currentTime / ambient.duration) * 100 : 0) + '%';
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.pick-overlay')) {
+                closePick();
+            }
+        });
+
+        if (settings.musicEnabled) {
+            ambient.play().catch(function () {
+                document.addEventListener('click', function start() {
+                    ambient.play();
+                    document.removeEventListener('click', start);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
